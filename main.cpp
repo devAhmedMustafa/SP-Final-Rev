@@ -245,6 +245,55 @@ void KareemAndKaram(){
 }
 #pragma endregion
 
+#pragma region Union
+
+union U{
+    int a;
+    int b;
+    int c;
+};
+
+struct S{
+    int a;
+    int b;
+    int c;
+};
+
+struct Vector2{
+    float a, b;
+};
+
+void printVec2(Vector2 vec){
+    cout << vec.a << " " << vec.b << endl;
+}
+
+struct Vector4{
+    union {
+        struct{
+            float a,b,c,d;
+        };
+        struct{
+            Vector2 x, y;
+        };
+    };
+};
+
+void WhatIsTheSize(){
+    U u = {1};
+    S s = {1,2,3};
+    cout << sizeof(u) << endl;
+    cout << sizeof(s) << endl;
+
+}
+
+void ConvertToAnotherStruct(){
+    Vector4 v = {1,2,3,4};
+    printVec2(v.x);
+    printVec2(v.y);
+}
+
+#pragma endregion
+
 // Just ignore this. I was using it for myself
 constexpr int operator""_s(unsigned long long mins){
     return mins*60;
@@ -391,9 +440,33 @@ void MatCells(){
 
 #pragma endregion
 
+#pragma region AddressSize
+
+void AddressPlus2(){
+    int* x = new int;
+    cout << x <<endl; // Assume result 0x60000000
+    cout << x+2<<endl; // Print would be 0x60000008
+
+    // 2 points to an integer which have a space of 4 bytes, so the result would be 0x60000000 + 2 * 4
+}
+
+#pragma endregion
+
+#pragma region Unscoped enums are not completly integers
+
+void EnumError(){
+    enum day{Sat, Sun, Mon, Tues};
+
+    day d1 = Mon;
+    int x = 2;
+    // d1 = x;  // This is wrong
+}
+
+#pragma endregion
+
 #pragma endregion
 
 int main(){
-    MatCells();
+
     return 0;
 }
